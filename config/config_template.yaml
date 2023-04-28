@@ -9,6 +9,9 @@ useRemoteFiles: FALSE
 refGenome: #full path to ref
 bedFile: #full path to bed
 bedFileGZ: #full path to gzipped bed
+strelkaVCF: FALSE # full path to strelka2 VCF. Used if only harmonizing
+haplotypecallerVCF: FALSE # full path to haplotypecaller VCF. Used if only harmonizing
+deepvariantVCF: FALSE # full path to deepvariant VCF. Used if only harmonizing
 
 runMode:
   streka2: TRUE

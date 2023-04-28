@@ -119,48 +119,27 @@ chromList = get_chrom_names(dictionaryFile, bedFile)
 #including preprocessing rules
 include: "rules/Snakefile_preprocess"
 
-
-if strelka2_mode and not dv_mode and not hc_mode:
+if strelka2_mode:
     include: 'rules/Snakefile_Strelka2'
     rule all:
         input:
             'strelka2/genotyped/strelka2_variants.vcf.gz'
 
-if hc_mode and not dv_mode and not strelka2_mode:
+if hc_mode:
     include: 'rules/Snakefile_HaplotypeCaller'
     rule all:
         input:
             'HaplotypeCaller/genotyped/HC_variants.vcf.gz'
 
-if dv_mode and not hc_mode and not strelka2_mode:
+if dv_mode:
     include: 'rules/Snakefile_DeepVariant'
     rule all:
         input:
             expand('deepVariant/called/vcfs/{sample}_all_chroms.vcf.gz', sample=sampleList) if by_chrom else expand('deepVariant/called_by_sample/{sample}.vcf.gz', sample=sampleList),
             'deepVariant/genotyped/DV_variants.vcf.gz'
             
-            
-if hc_mode and dv_mode and strelka2_mode and not har_mode:
-    include: 'rules/Snakefile_HaplotypeCaller'
-    include: 'rules/Snakefile_DeepVariant'
-    include: 'rules/Snakefile_Strelka2'
-    rule all:
-        input:
-            'HaplotypeCaller/genotyped/HC_variants.vcf.gz',
-            'deepVariant/genotyped/DV_variants.vcf.gz',   
-            'strelka2/genotyped/strelka2_variants.vcf.gz'
-            
-if hc_mode and dv_mode and strelka2_mode and har_mode:
-    include: 'rules/Snakefile_HaplotypeCaller'
-    include: 'rules/Snakefile_DeepVariant'
-    include: 'rules/Snakefile_Strelka2'
-    include: 'rules/Snakefile_harmonize'
-    rule all:
-        input:
-            'ensemble/all_callers_merged_genotypes.vcf.gz',
-            'ensemble/all_callers_merged_genotypes.vcf.gz.tbi'
 
-if har_mode_only:
+if har_mode:
     include: 'rules/Snakefile_harmonize'
     rule all:
         input:
